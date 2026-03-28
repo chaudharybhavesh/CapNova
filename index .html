@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaptionPro | Premium AI Auto Captions</title>
+    <style>
+        /* Base Styles & Premium Dot Background */
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px; margin: 0; padding: 0; padding-bottom: 60px; color: #334155; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226, 232, 240, 0.8); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1000px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 900; color: #2563eb; text-decoration: none; letter-spacing: -0.5px;}
+        .logo span { color: #0f172a; }
+        .nav-links { display: flex; gap: 20px; align-items: center;}
+        .nav-links a { text-decoration: none; color: #64748b; font-weight: 600; font-size: 15px; transition: 0.2s;}
+        .nav-links a:hover { color: #2563eb; }
+        .nav-btn { background: #0f172a; color: white !important; padding: 8px 18px; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; text-decoration: none;}
+        
+        main { flex-grow: 1; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        .hero-text { text-align: center; margin-bottom: 35px; max-width: 650px; }
+        .hero-text h1 { margin: 0 0 15px 0; font-size: 42px; font-weight: 900; letter-spacing: -1px; background: linear-gradient(135deg, #2563eb, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-text p { margin: 0; color: #475569; font-size: 18px; font-weight: 500;}
+
+        .container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 30px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); max-width: 420px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.5);}
+        .api-box { margin-bottom: 15px; text-align: left; }
+        .api-box label { font-size: 12px; font-weight: bold; color: #64748b; }
+        input[type="password"] { width: 90%; padding: 12px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; background: #f8fafc;}
+        
+        .upload-box { margin: 20px 0; padding: 20px 10px; border: 2px dashed #94a3b8; border-radius: 12px; text-align: center; background: #f1f5f9; cursor: pointer;}
+        .lang-select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; font-weight: bold; color: #1e293b; background-color: #fff; cursor: pointer;}
+        
+        .video-wrapper { position: relative; margin-top: 20px; border-radius: 12px; overflow: hidden; background: #000; display: none; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        video { width: 100%; display: block; max-height: 500px; object-fit: contain;}
+        
+        .caption-overlay { position: absolute; bottom: 20%; left: 5%; width: 90%; text-align: center; font-size: 32px; font-weight: 900; font-family: 'Impact', sans-serif; text-transform: uppercase; pointer-events: none; --text-color: #FFFFFF; --bg-color: rgba(0,0,0,0.6); --highlight-color: #FFFF00; --box-padding: 8px 16px; transition: bottom 0.2s, font-size 0.2s;}
+        .sentence-box { background-color: var(--bg-color); padding: var(--box-padding); border-radius: 8px; display: inline-block; line-height: 1.2; word-wrap: break-word; }
+        .normal-word { color: var(--text-color); text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; display: inline-block; margin: 0 4px; transition: opacity 0.1s ease;}
+        .active-word { color: var(--highlight-color); text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; transform: scale(1.15) translateY(-2px); display: inline-block; margin: 0 4px; }
+
+        .ui-watermark { position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.7); font-size: 16px; font-weight: 900; font-family: sans-serif; text-shadow: 2px 2px 0 rgba(0,0,0,0.6), -1px -1px 0 rgba(0,0,0,0.6), 1px -1px 0 rgba(0,0,0,0.6), -1px 1px 0 rgba(0,0,0,0.6), 1px 1px 0 rgba(0,0,0,0.6); pointer-events: none; z-index: 10; letter-spacing: 1px;}
+
+        .progress-container { width: 100%; background-color: #e2e8f0; border-radius: 8px; margin-top: 20px; overflow: hidden; display: none; height: 12px;}
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(45deg, #2563eb 25%, #3b82f6 25%, #3b82f6 50%, #2563eb 50%, #2563eb 75%, #3b82f6 75%, #3b82f6 100%); background-size: 20px 20px; animation: shimmer 1.5s linear infinite; transition: width 0.5s linear; }
+        @keyframes shimmer { 0% { background-position: 20px 0; } 100% { background-position: 0 0; } }
+
+        .settings-box { margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; text-align: left; display: none; }
+        .settings-box h4 { margin: 0 0 12px 0; color: #0f172a; font-size: 16px;}
+        .setting-row { margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .setting-row label { font-size: 13px; font-weight: bold; color: #475569; white-space: nowrap; }
+        .setting-row select, .setting-row input[type="range"] { width: 55%; padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; font-family: inherit;}
+        .setting-row input[type="color"] { border: none; width: 32px; height: 32px; cursor: pointer; border-radius: 6px; padding: 0; background: none; }
+        
+        .switch { position: relative; display: inline-block; width: 42px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        input:checked + .slider { background-color: #2563eb; }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        .editor-panel { display: none; margin-bottom: 20px; }
+        .edit-toggle-btn { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: bold; width: 100%; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;}
+        .edit-toggle-btn:hover { background: #e2e8f0; }
+        .editor-inputs-wrapper { background: #fff; padding: 15px; border-radius: 0 0 8px 8px; border: 1px solid #cbd5e1; border-top: none; max-height: 280px; overflow-y: auto; text-align: left; display: none; }
+        .editor-item-container { margin-bottom: 10px; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer;}
+        .editor-text-display { font-size: 15px; color: #1e293b; font-weight: bold; font-family: inherit; line-height: 1.4; text-align: center;}
+        .chunk-input { width: 90%; padding: 10px; border: 2px solid #2563eb; border-radius: 8px; font-size: 16px; font-weight: bold; font-family: inherit; display: none; text-align: center; margin: 0 auto;}
+        .edit-tools { display: none; justify-content: center; gap: 10px; margin-top: 12px; }
+        .tool-btn { padding: 10px 18px; border-radius: 8px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .split-btn { background: #fef08a; color: #854d0e; }
+        .save-btn { background: #10b981; color: white; }
+
+        .main-btn { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border: none; padding: 16px 20px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: 900; width: 100%; margin-top: 20px; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px;}
+        .main-btn:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; color: #94a3b8;}
+        #status { margin-top: 15px; font-size: 14px; color: #0f172a; font-weight: bold; padding: 12px; background: #f1f5f9; border-radius: 8px; margin-bottom: 0; border: 1px solid #e2e8f0;}
+
+        .action-buttons { display: none; gap: 12px; margin-top: 35px; padding-top: 25px; border-top: 2px dashed #e2e8f0; flex-direction: column;}
+        .action-btn { padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.3s; border: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-video { background: #10b981; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        .btn-video:hover { background: #059669; transform: translateY(-1px);}
+        .btn-srt { background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1;}
+        .btn-srt:hover { background: #cbd5e1;}
+
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 60px auto 20px auto; width: 100%;}
+        .feature-card { background: white; padding: 25px; border-radius: 16px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #f1f5f9; transition: 0.3s;}
+        .feature-icon { font-size: 40px; margin-bottom: 15px; }
+        .feature-card h3 { margin: 0 0 10px 0; color: #0f172a; font-size: 18px;}
+        .feature-card p { margin: 0; color: #64748b; font-size: 14px; line-height: 1.5;}
+
+        footer { background: #fff; border-top: 1px solid #e2e8f0; padding: 30px 20px; text-align: center; margin-top: auto; }
+        .footer-links { margin-bottom: 15px; }
+        .footer-links button { background: none; border: none; color: #64748b; margin: 0 12px; font-size: 14px; font-weight: 600; transition: 0.2s; cursor: pointer; font-family: inherit;}
+        .footer-links button:hover { color: #2563eb; }
+        .copyright { font-size: 14px; margin: 0; color: #94a3b8; font-weight: 500;}
+
+        .legal-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);}
+        .legal-content { background: #fff; width: 90%; max-width: 600px; max-height: 80vh; border-radius: 12px; padding: 30px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25);}
+        .legal-content h2 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;}
+        .legal-content p, .legal-content li { color: #475569; line-height: 1.6; font-size: 15px;}
+        .close-modal { position: absolute; top: 20px; right: 20px; background: #f1f5f9; border: none; font-size: 18px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #334155; transition: 0.2s;}
+        .close-modal:hover { background: #e2e8f0; color: #ef4444;}
+
+        .bottom-ad-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; padding: 8px; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 1000; text-align: center; border-top: 1px solid #e2e8f0;}
+        .ad-placeholder { max-width: 320px; height: 50px; margin: 0 auto; background: #f1f5f9; border: 1px dashed #94a3b8; display: flex; justify-content: center; align-items: center; color: #64748b; font-size: 12px; font-weight: bold; border-radius: 4px;}
+        
+        .ad-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; color: white;}
+        .ad-timer { font-size: 60px; font-weight: 900; color: #3b82f6; margin: 20px 0;}
+        .ad-message { font-size: 18px; color: #cbd5e1; text-align: center; padding: 0 20px;}
+
+        .watermark-box { background: linear-gradient(to right, #eff6ff, #fff); padding: 12px; border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
+        .watermark-box span { font-size: 13px; font-weight: bold; color: #1e40af;}
+        .btn-remove-wm { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .btn-remove-wm:hover { background: #1d4ed8; }
+        .wm-status { font-size: 12px; font-weight: bold; color: #10b981; display: none;}
+
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; max-width: 400px; gap: 15px;}
+            .hero-text h1 { font-size: 32px; }
+            .nav-links a.hide-mobile { display: none; }
+        }
+
+        #renderOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; color: white;}
+        #renderCanvas { max-width: 80%; max-height: 60%; border: 2px solid #3b82f6; border-radius: 8px; margin-bottom: 20px;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo">Caption<span>Pro</span></a>
+            <div class="nav-links">
+                <a href="#" class="hide-mobile">Features</a>
+                <a href="#" class="hide-mobile">How it works</a>
+                <a href="#" class="nav-btn">Start Creating</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <div class="hero-text">
+            <h1>Viral Captions in Seconds ✨</h1>
+            <p>The ultimate AI tool for Creators. Generate flawless captions, customize styles, and split lines like a Pro Editor.</p>
+        </div>
+
+        <div class="container">
+            
+            <div class="api-box">
+                <label>Developer Setup (Enter AssemblyAI Key):</label>
+                <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
+            </div>
+
+            <select id="langPicker" class="lang-select">
+                <option value="auto" selected>🤖 Smart Detect Language</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="hinglish">🇮🇳 Hinglish (Latin Text)</option>
+                <option value="hi">🇮🇳 Hindi (हिंदी)</option>
+                <option value="es">🇪🇸 Spanish</option>
+                <option value="fr">🇫🇷 French</option>
+                <option value="pt">🇵🇹 Portuguese</option>
+            </select>
+
+            <div class="upload-box" onclick="document.getElementById('videoUpload').click()">
+                <div style="font-size: 30px; margin-bottom: 5px;">📁</div>
+                <label style="font-size: 15px; font-weight: 800; color: #1e293b; display: block; cursor: pointer;">Tap to Upload Video</label>
+                <span style="font-size: 12px; color: #64748b;">MP4, MOV (Max 60 Seconds)</span>
+                <input type="file" id="videoUpload" accept="video/*" style="display: none;">
+            </div>
+            
+            <div class="video-wrapper" id="videoWrapper">
+                <video id="videoPlayer" controls playsinline crossorigin="anonymous"></video>
+                <div id="captionOverlay" class="caption-overlay"></div>
+                <div id="uiWatermark" class="ui-watermark">CaptionPro</div>
+            </div>
+
+            <div class="settings-box" id="settingsBox">
+                <div id="editorPanel" class="editor-panel">
+                    <button id="toggleEditorBtn" class="edit-toggle-btn">
+                        <span>✏️ Open Smart Text Editor</span>
+                        <span id="editorArrow">▼</span>
+                    </button>
+                    <div id="editorInputsWrapper" class="editor-inputs-wrapper">
+                        <div class="editor-hint">Tap any line to edit. Use '✂️ Split' to break lines instantly!</div>
+                        <div id="editorInputs"></div>
+                    </div>
+                </div>
+
+                <h4>🎨 Design Studio</h4>
+
+                <div class="watermark-box">
+                    <span>💧 Video Watermark</span>
+                    <button id="btnRemoveWm" class="btn-remove-wm">▶ Watch 1 Ad to Remove</button>
+                    <span id="wmStatus" class="wm-status">✅ Removed for this video</span>
+                </div>
+
+                <div class="setting-row">
+                    <label>Animation Style:</label>
+                    <select id="stylePicker">
+                        <option value="highlight" selected>✨ Highlight (Viral)</option>
+                        <option value="reveal">🔤 Reveal (Typewriter)</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <label>Background Box:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="boxToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-row">
+                    <label>Words Per Line:</label>
+                    <select id="chunkPicker">
+                        <option value="auto" selected>🌊 Natural Flow</option>
+                        <option value="1">⚡ 1 Word</option>
+                        <option value="2">🔥 2 Words</option>
+                        <option value="4">📺 4 Words</option>
+                    </select>
+                </div>
+
+                <div class="setting-row">
+                    <label>Typography:</label>
+                    <select id="fontPicker">
+                        <option value="'Impact', sans-serif">Impact (Bold)</option>
+                        <option value="'Arial', sans-serif">Arial (Clean)</option>
+                        <option value="'Comic Sans MS', cursive">Comic (Fun)</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="text-align: center;">
+                        <label style="font-size: 11px; display: block; font-weight: bold; color: #64748b;">Text</label>
+                        <input type="color" id="colorPicker" value="#FFFFFF">
+                    </div>
+                    <div style="text-align: center;" id="highlightWrapper">
+                        <label style="font-size: 11px; display: block; font-weight: bold; color: #64748b;">Highlight</label>
+                        <input type="color" id="highlightPicker" value="#FFFF00">
+                    </div>
+                    <div style="text-align: center;">
+                        <label style="font-size: 11px; display: block; font-weight: bold; color: #64748b;">Box</label>
+                        <input type="color" id="bgColorPicker" value="#000000">
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label>Font Size:</label>
+                    <input type="range" id="sizePicker" min="15" max="50" value="32">
+                </div>
+                <div class="setting-row">
+                    <label>Vertical Position:</label>
+                    <input type="range" id="posPicker" min="5" max="90" value="20">
+                </div>
+            </div>
+
+            <button id="generateBtn" class="main-btn" disabled>Generate Captions 🚀</button>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p id="status">Waiting for API key & video...</p>
+
+            <div class="action-buttons" id="actionButtons">
+                <button class="action-btn btn-video" id="btnDownloadVideo">🎬 Download Video (HQ Audio)</button>
+                <button class="action-btn btn-srt" id="btnDownloadSrt">📥 Export .SRT File</button>
+            </div>
+
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Support</h3>
+                <p>Smartly auto-detects and perfectly transcribes audio into crisp captions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✂️</div>
+                <h3>Razor Cut Editor</h3>
+                <p>Tap, type, or split. Edit your captions exactly like a professional video editing software.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Brand Customization</h3>
+                <p>Match your brand identity. Change fonts, text colors, highlights, and background boxes instantly.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <button onclick="openModal('privacyModal')">Privacy Policy</button>
+            <button onclick="openModal('termsModal')">Terms of Service</button>
+            <button onclick="openModal('contactModal')">Contact Support</button>
+        </div>
+        <p class="copyright">© CaptionPro. Crafted with ❤️ for Creators.</p>
+    </footer>
+
+    <div id="privacyModal" class="legal-modal">
+        <div class="legal-content">
+            <button class="close-modal" onclick="closeModal('privacyModal')">✖</button>
+            <h2>Privacy Policy</h2>
+            <p>Welcome to CaptionPro. Your privacy is critically important to us.</p>
+            <ul>
+                <li><strong>No Video Storage:</strong> All video processing and rendering happens locally on your device's browser. We do NOT upload, save, or store your videos on our servers.</li>
+                <li><strong>Audio Processing:</strong> We extract and send only the audio portion of your video to our secure AI partner (AssemblyAI) solely for the purpose of generating text captions. This audio is processed and immediately discarded.</li>
+                <li><strong>Cookies & Analytics:</strong> We use standard cookies for analytics and advertising (Google AdSense) to keep this tool free for users.</li>
+            </ul>
+            <p>By using our service, you agree to this data handling process.</p>
+        </div>
+    </div>
+
+    <div id="termsModal" class="legal-modal">
+        <div class="legal-content">
+            <button class="close-modal" onclick="closeModal('termsModal')">✖</button>
+            <h2>Terms of Service</h2>
+            <p>By accessing and using CaptionPro, you accept and agree to be bound by these terms.</p>
+            <ul>
+                <li><strong>Usage:</strong> You are responsible for the content you process using our tool. Do not use our service to generate captions for illegal or copyrighted material without permission.</li>
+                <li><strong>Service Availability:</strong> While we strive for 100% uptime, CaptionPro is provided "as is". We are not liable for any temporary downtimes or rendering failures.</li>
+                <li><strong>Monetization:</strong> We employ standard advertising and rewarded video ads to support our infrastructure. Users must not use ad-blockers to bypass these systems if they wish to access premium features like watermark removal.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="contactModal" class="legal-modal">
+        <div class="legal-content">
+            <button class="close-modal" onclick="closeModal('contactModal')">✖</button>
+            <h2>Contact Support</h2>
+            <p>Have a question, feedback, or need business support? We're here to help!</p>
+            <p><strong>Email:</strong> support@captionpro.com</p>
+            <p><strong>Business Inquiries:</strong> bhavesh@captionpro.com</p>
+            <p>We usually respond within 24-48 business hours.</p>
+        </div>
+    </div>
+
+    <div class="bottom-ad-banner">
+        <div class="ad-placeholder">AdSense / Adsterra Bottom Anchor Banner (320x50)</div>
+    </div>
+
+    <div id="adModal" class="ad-modal">
+        <div class="ad-message" id="adMessage">Loading Rewarded Ad...</div>
+        <div class="ad-timer" id="adTimer">3</div>
+        <div style="font-size: 12px; color: #64748b; margin-top: 20px;">(AdSense/Adsterra Code Will Go Here)</div>
+    </div>
+
+    <div id="renderOverlay">
+        <h2 style="color: white; margin-bottom: 10px;">Exporting Final Video... ⏳</h2>
+        <p style="color: #cbd5e1; margin-bottom: 20px;">Please wait. Do not switch tabs or lock your phone.</p>
+        <canvas id="renderCanvas"></canvas>
+    </div>
+
+    <script>
+        const uploader = document.getElementById('videoUpload');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusText = document.getElementById('status');
+        const captionOverlay = document.getElementById('captionOverlay');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const settingsBox = document.getElementById('settingsBox');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const actionButtons = document.getElementById('actionButtons');
+        const editorInputsWrapper = document.getElementById('editorInputsWrapper');
+        const editorInputs = document.getElementById('editorInputs');
+        
+        const stylePicker = document.getElementById('stylePicker');
+        const fontPicker = document.getElementById('fontPicker');
+        const sizePicker = document.getElementById('sizePicker');
+        const posPicker = document.getElementById('posPicker');
+        const colorPicker = document.getElementById('colorPicker');
+        const highlightPicker = document.getElementById('highlightPicker');
+        const bgColorPicker = document.getElementById('bgColorPicker');
+        const boxToggle = document.getElementById('boxToggle');
+        const highlightWrapper = document.getElementById('highlightWrapper');
+        const langPicker = document.getElementById('langPicker');
+
+        const btnRemoveWm = document.getElementById('btnRemoveWm');
+        const wmStatus = document.getElementById('wmStatus');
+        const uiWatermark = document.getElementById('uiWatermark');
+
+        let selectedFile = null;
+        let transcriptWords = [];
+        let customChunks = []; 
+        let chunkMode = 'auto'; 
+        let isProcessing = false;
+        let progressTimer;
+        let currentProgress = 0;
+
+        const SYNC_OFFSET = 150; 
+        let isWatermarkRemoved = false;
+
+        let userColor = "#FFFFFF";
+        let userHighlight = "#FFFF00";
+
+        let captionAnimFrameId = null;
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        colorPicker.addEventListener('input', (e) => { userColor = e.target.value; captionOverlay.style.setProperty('--text-color', userColor); });
+        highlightPicker.addEventListener('input', (e) => { userHighlight = e.target.value; captionOverlay.style.setProperty('--highlight-color', userHighlight); });
+        fontPicker.addEventListener('change', (e) => { captionOverlay.style.fontFamily = e.target.value; });
+        sizePicker.addEventListener('input', (e) => { captionOverlay.style.fontSize = e.target.value + 'px'; });
+        posPicker.addEventListener('input', (e) => { captionOverlay.style.bottom = e.target.value + '%'; });
+        
+        stylePicker.addEventListener('change', () => { 
+            captionOverlay.innerHTML = ""; 
+            if (stylePicker.value === 'reveal') {
+                highlightWrapper.style.display = 'none';
+            } else {
+                highlightWrapper.style.display = 'block';
+            }
+        });
+
+        function updateBoxStyle() {
+            if (boxToggle.checked) {
+                captionOverlay.style.setProperty('--box-padding', '8px 16px');
+                let color = bgColorPicker.value;
+                captionOverlay.style.setProperty('--bg-color', color === "#000000" ? "rgba(0,0,0,0.6)" : color);
+            } else {
+                captionOverlay.style.setProperty('--box-padding', '0px');
+                captionOverlay.style.setProperty('--bg-color', 'transparent');
+            }
+        }
+        boxToggle.addEventListener('change', updateBoxStyle);
+        bgColorPicker.addEventListener('input', updateBoxStyle);
+
+        function showMockAd(message, callback) {
+            const modal = document.getElementById('adModal');
+            const timerEl = document.getElementById('adTimer');
+            const msgEl = document.getElementById('adMessage');
+            
+            msgEl.innerText = message;
+            modal.style.display = 'flex';
+            
+            let timeLeft = 3; 
+            timerEl.innerText = timeLeft;
+
+            const interval = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if(timeLeft <= 0) {
+                    clearInterval(interval);
+                    modal.style.display = 'none';
+                    callback();
+                }
+            }, 1000);
+        }
+
+        btnRemoveWm.addEventListener('click', () => {
+            showMockAd("Playing Advertiser Video (Reward: Remove Watermark)...", () => {
+                isWatermarkRemoved = true;
+                btnRemoveWm.style.display = 'none';
+                wmStatus.style.display = 'block';
+                uiWatermark.style.display = 'none';
+            });
+        });
+
+        document.getElementById('chunkPicker').addEventListener('change', (e) => {
+            chunkMode = e.target.value; 
+            buildCustomChunks(transcriptWords); 
+            renderEditor(); 
+            captionOverlay.innerHTML = "";
+        });
+
+        document.getElementById('toggleEditorBtn').addEventListener('click', () => {
+            editorInputsWrapper.style.display = editorInputsWrapper.style.display === 'none' || editorInputsWrapper.style.display === '' ? 'block' : 'none';
+            document.getElementById('editorArrow').innerText = editorInputsWrapper.style.display === 'block' ? '▲' : '▼';
+        });
+
+        function startContinuousProgress() {
+            currentProgress = 0;
+            progressBar.style.width = "0%";
+            clearInterval(progressTimer);
+            progressTimer = setInterval(() => {
+                let remaining = 95 - currentProgress;
+                let step = remaining * 0.04; 
+                if (step < 0.15) step = 0.15; 
+                currentProgress += step;
+                if (currentProgress > 95) currentProgress = 95; 
+                progressBar.style.width = currentProgress + "%";
+            }, 500); 
+        }
+
+        // YAHAN HUA HAI DURATION LOCK FIX
+        uploader.addEventListener('change', (event) => {
+            if(isProcessing) return; 
+            let file = event.target.files[0];
+            if (file) {
+                // Secondary safety lock for memory (increased to 100MB)
+                if (file.size > 100 * 1024 * 1024) { 
+                    alert("⚠️ File is too heavy for browser editing! Max 100MB allowed."); 
+                    uploader.value = ''; 
+                    return; 
+                }
+
+                selectedFile = file;
+                let tempUrl = URL.createObjectURL(selectedFile);
+                videoPlayer.src = tempUrl;
+
+                // Wait for video to load metadata to check duration
+                videoPlayer.onloadedmetadata = function() {
+                    // Primary Business Lock: 60 Seconds
+                    if (videoPlayer.duration > 61) { 
+                        alert("⚠️ Video too long! Please upload videos under 60 seconds (Shorts/Reels only).");
+                        uploader.value = ''; 
+                        videoWrapper.style.display = 'none';
+                        actionButtons.style.display = 'none';
+                        statusText.innerText = "Waiting for API key & video...";
+                        generateBtn.disabled = true;
+                        selectedFile = null;
+                        return;
+                    }
+
+                    // If video passes the duration test, show the player
+                    videoWrapper.style.display = 'block';
+                    actionButtons.style.display = 'none'; 
+                    statusText.innerText = "📁 Video selected! Now enter API Key if you haven't.";
+                    
+                    isWatermarkRemoved = false;
+                    btnRemoveWm.style.display = 'block';
+                    wmStatus.style.display = 'none';
+                    uiWatermark.style.display = 'block';
+
+                    checkReady();
+                };
+            }
+        });
+
+        apiKeyInput.addEventListener('input', checkReady);
+
+        function checkReady() {
+            if (isProcessing) return; 
+            if (selectedFile && apiKeyInput.value.length > 10) {
+                generateBtn.disabled = false;
+                statusText.innerText = "✅ Ready! Click 'Generate Captions' above.";
+            } else {
+                generateBtn.disabled = true;
+            }
+        }
+
+        function cleanAndSplitAIWords(rawWords) {
+            let cleanWords = [];
+            rawWords.forEach(w => {
+                let splitText = w.text.split(/\s+/); 
+                if(splitText.length > 1) {
+                    let timePerWord = (w.end - w.start) / splitText.length;
+                    splitText.forEach((st, idx) => {
+                        if(st.trim() !== "") cleanWords.push({ text: st.trim(), start: w.start + (idx * timePerWord), end: w.start + ((idx + 1) * timePerWord) });
+                    });
+                } else {
+                    cleanWords.push(w);
+                }
+            });
+            return cleanWords;
+        }
+
+        function buildCustomChunks(wordsArray) {
+            customChunks = [];
+            let currentChunk = [];
+            for (let i = 0; i < wordsArray.length; i++) {
+                currentChunk.push(wordsArray[i]);
+                let wordText = wordsArray[i].text;
+                let hasPunctuation = /[.,!?]/.test(wordText);
+                let nextWord = wordsArray[i+1];
+                let isLongPause = nextWord ? (nextWord.start - wordsArray[i].end) > 400 : false; 
+                let shouldBreak = false;
+
+                if (chunkMode === 'auto') {
+                    if (hasPunctuation || isLongPause || currentChunk.length >= 6 || i === wordsArray.length - 1) shouldBreak = true;
+                } else {
+                    if (currentChunk.length >= parseInt(chunkMode) || hasPunctuation || i === wordsArray.length - 1) shouldBreak = true;
+                }
+
+                if (shouldBreak) {
+                    let chunkEnd = currentChunk[currentChunk.length - 1].end;
+                    let extendedEnd;
+                    
+                    if (nextWord) {
+                        let gap = nextWord.start - chunkEnd;
+                        if (gap <= 800) {
+                            extendedEnd = nextWord.start;
+                        } else {
+                            extendedEnd = chunkEnd + 800;
+                        }
+                    } else {
+                        extendedEnd = chunkEnd + 1500; 
+                    }
+
+                    customChunks.push({ start: currentChunk[0].start, end: extendedEnd, words: [...currentChunk] });
+                    currentChunk = []; 
+                }
+            }
+        }
+
+        function convertToHinglish(text) {
+            const charMap = { 'अ':'a', 'आ':'aa', 'इ':'i', 'ई':'ee', 'उ':'u', 'ऊ':'oo', 'ए':'e', 'ऐ':'ai', 'ओ':'o', 'औ':'au', 'क':'k', 'ख':'kh', 'ग':'g', 'घ':'gh', 'च':'ch', 'छ':'chh', 'ज':'j', 'झ':'jh', 'ट':'t', 'ठ':'th', 'ड':'d', 'ढ':'dh', 'ण':'n', 'त':'t', 'थ':'th', 'द':'d', 'ध':'dh', 'न':'n', 'प':'p', 'फ':'f', 'ब':'b', 'भ':'bh', 'म':'m', 'य':'y', 'र':'r', 'ल':'l', 'व':'v', 'श':'sh', 'ष':'sh', 'स':'s', 'ह':'h', 'ा':'a', 'ि':'i', 'ी':'ee', 'ु':'u', 'ू':'oo', 'े':'e', 'ै':'ai', 'ो':'o', 'ौ':'au', 'ं':'n', 'ँ':'n', '्':'' };
+            const commonWords = { "है": "hai", "हैं": "hain", "मैं": "main", "क्यों": "kyon", "क्या": "kya", "कि": "ki", "हो": "ho" };
+            if (commonWords[text]) return commonWords[text];
+            let hinglishWord = "";
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (charMap[char] !== undefined) { hinglishWord += charMap[char]; } else { hinglishWord += char; }
+            }
+            return hinglishWord;
+        }
+
+        function renderEditor() {
+            editorInputs.innerHTML = "";
+            customChunks.forEach((chunk, index) => {
+                let chunkText = chunk.words.map(w => w.text).join(" ");
+                let container = document.createElement("div"); container.className = "editor-item-container";
+                let textDisplay = document.createElement("div"); textDisplay.className = "editor-text-display"; textDisplay.innerText = chunkText;
+                let inputWrapper = document.createElement("div"); inputWrapper.style.width = "100%"; inputWrapper.style.textAlign = "center";
+                let input = document.createElement("input"); input.type = "text"; input.value = chunkText; input.className = "chunk-input";
+                let editTools = document.createElement("div"); editTools.className = "edit-tools";
+                let splitBtn = document.createElement("button"); splitBtn.className = "tool-btn split-btn"; splitBtn.innerText = "✂️ Split";
+                let saveBtn = document.createElement("button"); saveBtn.className = "tool-btn save-btn"; saveBtn.innerText = "✅ Save";
+                
+                editTools.appendChild(splitBtn); editTools.appendChild(saveBtn);
+                inputWrapper.appendChild(input); inputWrapper.appendChild(editTools);
+
+                container.onclick = (e) => {
+                    if(input.style.display === 'block') return;
+                    textDisplay.style.display = 'none'; input.style.display = 'block'; editTools.style.display = 'flex'; input.focus(); 
+                };
+                
+                splitBtn.onclick = (e) => {
+                    e.preventDefault(); e.stopPropagation(); 
+                    
+                    if(document.activeElement !== input) input.focus();
+
+                    let cursorPosition = input.selectionStart;
+                    let textPart1 = input.value.substring(0, cursorPosition).trim();
+                    let textPart2 = input.value.substring(cursorPosition).trim();
+
+                    if (textPart1.length > 0 && textPart2.length > 0) {
+                        let originalChunk = customChunks[index];
+                        let totalDuration = originalChunk.end - originalChunk.start;
+                        let words1 = textPart1.split(" ").filter(w => w !== "");
+                        let words2 = textPart2.split(" ").filter(w => w !== "");
+                        let timePerWord = totalDuration / (words1.length + words2.length);
+
+                        let chunk1End = originalChunk.start + (words1.length * timePerWord);
+                        let newChunk1 = { start: originalChunk.start, end: chunk1End, words: words1.map((w, i) => ({ text: w, start: originalChunk.start + (i * timePerWord), end: originalChunk.start + ((i + 1) * timePerWord) })) };
+                        let newChunk2 = { start: chunk1End, end: originalChunk.end, words: words2.map((w, i) => ({ text: w, start: chunk1End + (i * timePerWord), end: chunk1End + ((i + 1) * timePerWord) })) };
+
+                        customChunks.splice(index, 1, newChunk1, newChunk2);
+                        captionOverlay.innerHTML = ""; renderEditor(); 
+                    } else {
+                        alert("Please click exactly between two words to split the line."); 
+                    }
+                };
+
+                saveBtn.onclick = (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    let newText = input.value; 
+                    
+                    let newWordsText = newText.split(" ").filter(w => w.trim() !== "");
+                    
+                    if(newWordsText.length > 0) {
+                        textDisplay.innerText = newText; 
+                        input.style.display = 'none'; editTools.style.display = 'none'; textDisplay.style.display = 'block'; 
+                        let timePerWord = (chunk.end - chunk.start) / newWordsText.length;
+                        chunk.words = newWordsText.map((text, i) => ({ text: text, start: chunk.start + (i * timePerWord), end: chunk.start + ((i + 1) * timePerWord) }));
+                        captionOverlay.innerHTML = "";
+                    } else {
+                        customChunks.splice(index, 1);
+                        captionOverlay.innerHTML = "";
+                        renderEditor();
+                    }
+                };
+                container.appendChild(textDisplay); container.appendChild(inputWrapper); editorInputs.appendChild(container);
+            });
+        }
+
+        generateBtn.addEventListener('click', async () => {
+            const API_KEY = apiKeyInput.value.trim();
+            if (!selectedFile || !API_KEY) return;
+
+            showMockAd("Playing Advertiser Video (Reward: Generate AI Captions)...", async () => {
+                
+                isProcessing = true; generateBtn.disabled = true; actionButtons.style.display = 'none'; 
+                settingsBox.style.display = 'none'; editorPanel.style.display = 'none'; editorInputsWrapper.style.display = 'none'; 
+                document.getElementById('editorArrow').innerText = '▼'; document.getElementById('toggleEditorBtn').style.borderRadius = '8px';
+                progressContainer.style.display = 'block'; captionOverlay.innerHTML = "";
+                startContinuousProgress();
+
+                try {
+                    statusText.innerText = "⏳ AI is processing your video... Please wait.";
+                    const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', { method: 'POST', headers: { 'authorization': API_KEY }, body: selectedFile });
+                    const uploadData = await uploadRes.json();
+                    
+                    if (uploadData.error) throw new Error(uploadData.error); 
+
+                    let lang = document.getElementById('langPicker').value;
+                    let apiPayload = { 
+                        audio_url: uploadData.upload_url,
+                        speech_models: ["universal-2"] 
+                    };
+                    
+                    if (lang === 'auto') {
+                        apiPayload.language_detection = true;
+                    } else if (lang === 'hinglish') {
+                        apiPayload.language_code = 'hi';
+                    } else {
+                        apiPayload.language_code = lang;
+                    }
+
+                    const transcriptRes = await fetch('https://api.assemblyai.com/v2/transcript', { method: 'POST', headers: { 'authorization': API_KEY, 'content-type': 'application/json' }, body: JSON.stringify(apiPayload) });
+                    const transcriptData = await transcriptRes.json();
+                    
+                    if (transcriptData.error) throw new Error(transcriptData.error); 
+
+                    const transcriptId = transcriptData.id;
+                    if (!transcriptId) throw new Error("API Initialization Failed."); 
+
+                    let isCompleted = false;
+                    while (!isCompleted) {
+                        await new Promise(r => setTimeout(r, 3000)); 
+                        const checkRes = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, { headers: { 'authorization': API_KEY }});
+                        const checkData = await checkRes.json();
+                        
+                        if (checkData.status === 'completed') {
+                            isCompleted = true; isProcessing = false;
+                            let rawWords = checkData.words;
+                            
+                            if (lang === 'hinglish') {
+                                rawWords = rawWords.map(w => ({ ...w, text: convertToHinglish(w.text) }));
+                            }
+                            
+                            transcriptWords = cleanAndSplitAIWords(rawWords);
+                            buildCustomChunks(transcriptWords);
+                            
+                            clearInterval(progressTimer); progressBar.style.width = "100%";
+                            statusText.innerText = "✅ Done! Preview your video and Download below.";
+                            setTimeout(() => progressContainer.style.display = 'none', 1000);
+                            settingsBox.style.display = 'block'; editorPanel.style.display = 'block'; actionButtons.style.display = 'flex';
+                            
+                            if (stylePicker.value === 'reveal') {
+                                highlightWrapper.style.display = 'none';
+                            } else {
+                                highlightWrapper.style.display = 'block';
+                            }
+                            
+                            renderEditor(); syncCaptions();
+                        } else if (checkData.status === 'error') {
+                            throw new Error(checkData.error || "AI failed to process audio.");
+                        } 
+                    }
+                } catch (error) {
+                    isProcessing = false; 
+                    clearInterval(progressTimer);
+                    progressContainer.style.display = 'none';
+                    statusText.innerText = "❌ Error: " + error.message; 
+                    generateBtn.disabled = false;
+                }
+            });
+        });
+
+        function syncCaptions() {
+            function updateCaption() {
+                const currentTime = (videoPlayer.currentTime * 1000) + SYNC_OFFSET; 
+                let htmlOutput = "";
+                let activeChunk = customChunks.find(c => currentTime >= c.start && currentTime <= c.end);
+                
+                if (activeChunk) {
+                    let activeWordIndex = -1;
+                    let lastSpokenIndex = -1;
+                    
+                    for (let i = 0; i < activeChunk.words.length; i++) {
+                        let w = activeChunk.words[i];
+                        if (currentTime >= w.start) {
+                            lastSpokenIndex = i;
+                            if (currentTime <= w.end) activeWordIndex = i;
+                        }
+                    }
+
+                    let animStyle = stylePicker.value;
+                    let wordsHtml = "";
+
+                    activeChunk.words.forEach((w, i) => {
+                        if (animStyle === 'reveal') {
+                            if (i <= lastSpokenIndex) {
+                                wordsHtml += `<span class="normal-word">${w.text}</span>`;
+                            } else {
+                                wordsHtml += `<span class="normal-word" style="opacity: 0;">${w.text}</span>`;
+                            }
+                        } else {
+                            wordsHtml += `<span class="${i === activeWordIndex ? 'active-word' : 'normal-word'}">${w.text}</span>`;
+                        }
+                    });
+
+                    htmlOutput = `<div class="sentence-box">${wordsHtml}</div>`;
+                }
+                captionOverlay.innerHTML = htmlOutput;
+                
+                if (!videoPlayer.paused && !videoPlayer.ended) {
+                    captionAnimFrameId = requestAnimationFrame(updateCaption);
+                }
+            }
+            
+            videoPlayer.addEventListener('play', () => {
+                if(captionAnimFrameId) cancelAnimationFrame(captionAnimFrameId);
+                captionAnimFrameId = requestAnimationFrame(updateCaption);
+            });
+        }
+
+        document.getElementById('btnDownloadVideo').addEventListener('click', async () => {
+            if(customChunks.length === 0) return alert("Please generate captions first!");
+
+            const overlay = document.getElementById('renderOverlay');
+            const canvas = document.getElementById('renderCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            overlay.style.display = 'flex';
+            
+            canvas.width = videoPlayer.videoWidth;
+            canvas.height = videoPlayer.videoHeight;
+
+            const canvasStream = canvas.captureStream(30); 
+            
+            let audioStream;
+            if (videoPlayer.captureStream) audioStream = videoPlayer.captureStream();
+            else if (videoPlayer.mozCaptureStream) audioStream = videoPlayer.mozCaptureStream();
+
+            const tracks = [...canvasStream.getVideoTracks()];
+            if (audioStream && audioStream.getAudioTracks().length > 0) {
+                tracks.push(audioStream.getAudioTracks()[0]);
+            }
+            const combinedStream = new MediaStream(tracks);
+
+            let mimeType = 'video/webm;codecs=vp9';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : 'video/webm';
+            }
+
+            let recorderOptions = { mimeType: mimeType };
+            try {
+                recorderOptions = {
+                    mimeType: mimeType,
+                    videoBitsPerSecond: 8000000, 
+                    audioBitsPerSecond: 320000   
+                };
+            } catch (e) {}
+
+            const recorder = new MediaRecorder(combinedStream, recorderOptions);
+            const chunks = [];
+
+            recorder.ondataavailable = e => chunks.push(e.data);
+            
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `CaptionPro_HQ.` + (mimeType.includes('mp4') ? 'mp4' : 'webm');
+                a.click();
+                
+                overlay.style.display = 'none'; 
+                videoPlayer.volume = 1; 
+            };
+
+            videoPlayer.onended = () => {
+                if (recorder.state === "recording") {
+                    recorder.stop();
+                }
+            };
+
+            recorder.start();
+            videoPlayer.currentTime = 0; 
+            videoPlayer.muted = false; 
+            videoPlayer.volume = 0; 
+            await videoPlayer.play();
+
+            function drawFrame() {
+                if (videoPlayer.paused || videoPlayer.ended) { 
+                    if (recorder.state === "recording") recorder.stop(); 
+                    return; 
+                }
+
+                ctx.drawImage(videoPlayer, 0, 0, canvas.width, canvas.height);
+
+                if (!isWatermarkRemoved) {
+                    let wmSize = Math.max(20, canvas.width * 0.03);
+                    ctx.font = `900 ${wmSize}px sans-serif`;
+                    ctx.textAlign = "right"; 
+                    ctx.textBaseline = "top";
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = "rgba(0,0,0,0.6)";
+                    ctx.strokeText("CaptionPro", canvas.width - 20, 20);
+                    ctx.fillStyle = "rgba(255,255,255,0.7)";
+                    ctx.fillText("CaptionPro", canvas.width - 20, 20);
+                }
+
+                const currentTime = (videoPlayer.currentTime * 1000) + SYNC_OFFSET;
+                let activeChunk = customChunks.find(c => currentTime >= c.start && currentTime <= c.end);
+                
+                if (activeChunk) {
+                    let activeWordIndex = -1;
+                    let lastSpokenIndex = -1;
+                    
+                    for (let i = 0; i < activeChunk.words.length; i++) {
+                        let w = activeChunk.words[i];
+                        if (currentTime >= w.start) {
+                            lastSpokenIndex = i;
+                            if (currentTime <= w.end) activeWordIndex = i;
+                        }
+                    }
+                    
+                    let scale = sizePicker.value / 32; 
+                    let fontSize = Math.floor(canvas.width * 0.05 * scale); 
+                    
+                    ctx.font = `900 ${fontSize}px ${fontPicker.value}`;
+                    ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+                    
+                    let yPosOffset = posPicker.value;
+                    let yPos = canvas.height - (canvas.height * (yPosOffset / 100)); 
+                    
+                    let fullText = activeChunk.words.map(w => w.text).join(" ");
+                    let textWidth = ctx.measureText(fullText).width;
+                    
+                    if (boxToggle.checked) {
+                        let userBgColor = bgColorPicker.value === "#000000" ? "rgba(0, 0, 0, 0.6)" : bgColorPicker.value;
+                        ctx.fillStyle = userBgColor;
+                        ctx.fillRect((canvas.width / 2) - (textWidth / 2) - 20, yPos - fontSize - 10, textWidth + 40, fontSize + 20);
+                    }
+
+                    let startX = (canvas.width / 2) - (textWidth / 2);
+                    let animStyle = stylePicker.value;
+
+                    activeChunk.words.forEach((w, i) => {
+                        let wordWidth = ctx.measureText(w.text + " ").width;
+                        
+                        if (animStyle === 'reveal') {
+                            if (i <= lastSpokenIndex) {
+                                ctx.strokeStyle = "black"; ctx.lineWidth = fontSize * 0.1;
+                                ctx.strokeText(w.text, startX + (wordWidth/2), yPos);
+                                ctx.fillStyle = colorPicker.value; 
+                                ctx.fillText(w.text, startX + (wordWidth/2), yPos);
+                            }
+                        } else {
+                            ctx.strokeStyle = "black"; ctx.lineWidth = fontSize * 0.1;
+                            ctx.strokeText(w.text, startX + (wordWidth/2), yPos);
+                            ctx.fillStyle = (i === activeWordIndex) ? highlightPicker.value : colorPicker.value;
+                            ctx.fillText(w.text, startX + (wordWidth/2), yPos);
+                        }
+                        startX += wordWidth;
+                    });
+                }
+                
+                requestAnimationFrame(drawFrame);
+            }
+            
+            requestAnimationFrame(drawFrame);
+        });
+
+        document.getElementById('btnDownloadSrt').addEventListener('click', () => {
+            if(customChunks.length === 0) return alert("Please generate captions first!");
+            let srtContent = "";
+            customChunks.forEach((chunk, index) => {
+                let s = new Date(chunk.start); let e = new Date(chunk.end);
+                let fmt = d => `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}:${String(d.getUTCSeconds()).padStart(2,'0')},${String(d.getUTCMilliseconds()).padStart(3,'0')}`;
+                srtContent += `${index + 1}\n${fmt(s)} --> ${fmt(e)}\n${chunk.words.map(w=>w.text).join(" ")}\n\n`;
+            });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([srtContent], { type: 'text/srt' }));
+            a.download = 'CaptionPro_HighQuality.srt';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        });
+    </script>
+</body>
+</html>
