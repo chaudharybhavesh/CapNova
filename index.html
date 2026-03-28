@@ -22,9 +22,6 @@
         .hero-text p { margin: 0; color: #475569; font-size: 18px; font-weight: 500;}
 
         .container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 30px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); max-width: 420px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.5);}
-        .api-box { margin-bottom: 15px; text-align: left; }
-        .api-box label { font-size: 12px; font-weight: bold; color: #64748b; }
-        input[type="password"] { width: 90%; padding: 12px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; background: #f8fafc;}
         
         .upload-box { margin: 20px 0; padding: 20px 10px; border: 2px dashed #94a3b8; border-radius: 12px; text-align: center; background: #f1f5f9; cursor: pointer;}
         .lang-select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 15px; font-weight: bold; color: #1e293b; background-color: #fff; cursor: pointer;}
@@ -144,11 +141,6 @@
 
         <div class="container">
             
-            <div class="api-box">
-                <label>Developer Setup (Enter AssemblyAI Key):</label>
-                <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
-            </div>
-
             <select id="langPicker" class="lang-select">
                 <option value="auto" selected>🤖 Smart Detect Language</option>
                 <option value="en">🇺🇸 English</option>
@@ -257,7 +249,7 @@
             <div class="progress-container" id="progressContainer">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
-            <p id="status">Waiting for API key & video...</p>
+            <p id="status">Waiting for video...</p>
 
             <div class="action-buttons" id="actionButtons">
                 <button class="action-btn btn-video" id="btnDownloadVideo">🎬 Download Video (HQ Audio)</button>
@@ -356,7 +348,6 @@
         const generateBtn = document.getElementById('generateBtn');
         const statusText = document.getElementById('status');
         const captionOverlay = document.getElementById('captionOverlay');
-        const apiKeyInput = document.getElementById('apiKeyInput');
         const settingsBox = document.getElementById('settingsBox');
         const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
@@ -487,12 +478,10 @@
             }, 500); 
         }
 
-        // YAHAN HUA HAI DURATION LOCK FIX
         uploader.addEventListener('change', (event) => {
             if(isProcessing) return; 
             let file = event.target.files[0];
             if (file) {
-                // Secondary safety lock for memory (increased to 100MB)
                 if (file.size > 100 * 1024 * 1024) { 
                     alert("⚠️ File is too heavy for browser editing! Max 100MB allowed."); 
                     uploader.value = ''; 
@@ -503,46 +492,30 @@
                 let tempUrl = URL.createObjectURL(selectedFile);
                 videoPlayer.src = tempUrl;
 
-                // Wait for video to load metadata to check duration
                 videoPlayer.onloadedmetadata = function() {
-                    // Primary Business Lock: 60 Seconds
                     if (videoPlayer.duration > 61) { 
                         alert("⚠️ Video too long! Please upload videos under 60 seconds (Shorts/Reels only).");
                         uploader.value = ''; 
                         videoWrapper.style.display = 'none';
                         actionButtons.style.display = 'none';
-                        statusText.innerText = "Waiting for API key & video...";
+                        statusText.innerText = "Waiting for video...";
                         generateBtn.disabled = true;
                         selectedFile = null;
                         return;
                     }
 
-                    // If video passes the duration test, show the player
                     videoWrapper.style.display = 'block';
                     actionButtons.style.display = 'none'; 
-                    statusText.innerText = "📁 Video selected! Now enter API Key if you haven't.";
+                    statusText.innerText = "✅ Ready! Click 'Generate Captions' above.";
+                    generateBtn.disabled = false;
                     
                     isWatermarkRemoved = false;
                     btnRemoveWm.style.display = 'block';
                     wmStatus.style.display = 'none';
                     uiWatermark.style.display = 'block';
-
-                    checkReady();
                 };
             }
         });
-
-        apiKeyInput.addEventListener('input', checkReady);
-
-        function checkReady() {
-            if (isProcessing) return; 
-            if (selectedFile && apiKeyInput.value.length > 10) {
-                generateBtn.disabled = false;
-                statusText.innerText = "✅ Ready! Click 'Generate Captions' above.";
-            } else {
-                generateBtn.disabled = true;
-            }
-        }
 
         function cleanAndSplitAIWords(rawWords) {
             let cleanWords = [];
@@ -679,9 +652,9 @@
             });
         }
 
+        // --- NEW BACKEND FETCH LOGIC ADDED HERE ---
         generateBtn.addEventListener('click', async () => {
-            const API_KEY = apiKeyInput.value.trim();
-            if (!selectedFile || !API_KEY) return;
+            if (!selectedFile) return;
 
             showMockAd("Playing Advertiser Video (Reward: Generate AI Captions)...", async () => {
                 
@@ -692,38 +665,32 @@
                 startContinuousProgress();
 
                 try {
-                    statusText.innerText = "⏳ AI is processing your video... Please wait.";
-                    const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', { method: 'POST', headers: { 'authorization': API_KEY }, body: selectedFile });
-                    const uploadData = await uploadRes.json();
-                    
-                    if (uploadData.error) throw new Error(uploadData.error); 
-
+                    statusText.innerText = "⏳ Uploading video to your secure backend...";
                     let lang = document.getElementById('langPicker').value;
-                    let apiPayload = { 
-                        audio_url: uploadData.upload_url,
-                        speech_models: ["universal-2"] 
-                    };
-                    
-                    if (lang === 'auto') {
-                        apiPayload.language_detection = true;
-                    } else if (lang === 'hinglish') {
-                        apiPayload.language_code = 'hi';
-                    } else {
-                        apiPayload.language_code = lang;
-                    }
 
-                    const transcriptRes = await fetch('https://api.assemblyai.com/v2/transcript', { method: 'POST', headers: { 'authorization': API_KEY, 'content-type': 'application/json' }, body: JSON.stringify(apiPayload) });
-                    const transcriptData = await transcriptRes.json();
+                    const formData = new FormData();
+                    formData.append("file", selectedFile);
+                    formData.append("language", lang);
+
+                    const uploadRes = await fetch('https://captions-backend-pgk2.onrender.com/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const transcriptData = await uploadRes.json();
                     
                     if (transcriptData.error) throw new Error(transcriptData.error); 
 
                     const transcriptId = transcriptData.id;
-                    if (!transcriptId) throw new Error("API Initialization Failed."); 
+                    if (!transcriptId) throw new Error("Backend Initialization Failed."); 
+
+                    statusText.innerText = "⚙️ AI is processing captions... Please wait.";
 
                     let isCompleted = false;
                     while (!isCompleted) {
                         await new Promise(r => setTimeout(r, 3000)); 
-                        const checkRes = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, { headers: { 'authorization': API_KEY }});
+                        
+                        // Yahan par Frontend backend ko puch raha hai ki captions ban gaye ya nahi
+                        const checkRes = await fetch(`https://captions-backend-pgk2.onrender.com/status/${transcriptId}`);
                         const checkData = await checkRes.json();
                         
                         if (checkData.status === 'completed') {
@@ -975,4 +942,4 @@
         });
     </script>
 </body>
-</html>
+        </html>
