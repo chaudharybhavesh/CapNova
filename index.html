@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="google-site-verification" content="tyWSCKbAANy1-R5UUvqFiAydfKtoO7lKLq5XK8Hl3Xk" />
+    
     <title>CaptionPro | Premium AI Auto Captions</title>
     <style>
         /* Base Styles & Premium Dot Background */
@@ -495,7 +498,7 @@
         boxToggle.addEventListener('change', updateBoxStyle);
         bgColorPicker.addEventListener('input', updateBoxStyle);
 
-        // 2. YAHAN HAI WATERMARK BUTTON WALA SMART LINK
+        // --- 2. YAHAN HAI WATERMARK BUTTON WALA SMART LINK ---
         btnRemoveWm.addEventListener('click', () => {
             // Adsterra Smart Link opens in a new tab
             window.open("https://www.profitablecpmratenetwork.com/w3pnv253iz?key=5a1ab94ce679fabc7f8983de83ee91a4", '_blank');
@@ -707,7 +710,7 @@
             });
         }
 
-        // 3. YAHAN HAI GENERATE BUTTON WALA SMART LINK
+        // --- 3. YAHAN HAI GENERATE BUTTON WALA SMART LINK ---
         generateBtn.addEventListener('click', async () => {
             if (!selectedFile) return;
 
@@ -833,9 +836,14 @@
             });
         }
 
+        // --- 4. YAHAN HAI DOWNLOAD BUTTON WALA SMART LINK ---
         document.getElementById('btnDownloadVideo').addEventListener('click', async () => {
             if(customChunks.length === 0) return alert("Please generate captions first!");
 
+            // ✅ Download dabate hi naye tab mein Ad khulega
+            window.open("https://www.profitablecpmratenetwork.com/w3pnv253iz?key=5a1ab94ce679fabc7f8983de83ee91a4", '_blank');
+
+            // Aur main tab mein tumhara video background mein render hona shuru!
             const overlay = document.getElementById('renderOverlay');
             const canvas = document.getElementById('renderCanvas');
             const ctx = canvas.getContext('2d');
@@ -997,4 +1005,4 @@
         });
     </script>
 </body>
-</html>
+            </html>
