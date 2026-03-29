@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <meta name="description" content="CapNova - Free AI Auto Captions Generator. Add viral subtitles to your Reels, Shorts, and TikToks in seconds without watermarks.">
+    <meta name="keywords" content="AI auto captions, add subtitles to video, auto subtitle generator, viral video editor, free captions maker, hindi to english captions">
+    <meta name="author" content="Bhavesh Chaudhary">
     <meta name="google-site-verification" content="tyWSCKbAANy1-R5UUvqFiAydfKtoO7lKLq5XK8Hl3Xk" />
     
-    <title>CaptionPro | Premium AI Auto Captions</title>
+    <meta property="og:title" content="CapNova | Premium AI Auto Captions">
+    <meta property="og:description" content="Generate flawless viral captions for your videos in seconds. No watermarks, 100% free.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chaudharybhavesh.github.io">
+    <meta property="og:image" content="https://chaudharybhavesh.github.io/preview-image.jpg"> 
+    
+    <link rel="preconnect" href="https://captions-backend-pgk2.onrender.com">
+    <link rel="dns-prefetch" href="https://captions-backend-pgk2.onrender.com">
+    
+    <title>CapNova | Premium AI Auto Captions</title>
+    
     <style>
         /* Base Styles & Premium Dot Background */
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px; margin: 0; padding: 0; padding-bottom: 60px; color: #334155; display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
@@ -17,7 +30,6 @@
         .nav-links { display: flex; gap: 20px; align-items: center;}
         .nav-links a { text-decoration: none; color: #64748b; font-weight: 600; font-size: 15px; transition: 0.2s;}
         .nav-links a:hover { color: #2563eb; }
-        .nav-btn { background: #0f172a; color: white !important; padding: 8px 18px; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; text-decoration: none;}
         
         /* Dark Mode Toggle Button */
         .theme-toggle { background: none; border: none; font-size: 22px; cursor: pointer; padding: 0; transition: transform 0.2s; }
@@ -38,13 +50,13 @@
         
         .caption-overlay { position: absolute; bottom: 20%; left: 5%; width: 90%; text-align: center; font-size: 32px; font-weight: 900; font-family: 'Impact', sans-serif; text-transform: uppercase; pointer-events: none; --text-color: #FFFFFF; --bg-color: rgba(0,0,0,0.6); --highlight-color: #FFFF00; --box-padding: 8px 16px; transition: bottom 0.2s, font-size 0.2s;}
         .sentence-box { background-color: var(--bg-color); padding: var(--box-padding); border-radius: 8px; display: inline-block; line-height: 1.2; word-wrap: break-word; }
-        .normal-word { color: var(--text-color); text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; display: inline-block; margin: 0 4px; transition: opacity 0.1s ease;}
-        .active-word { color: var(--highlight-color); text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000; transform: scale(1.15) translateY(-2px); display: inline-block; margin: 0 4px; }
+        .normal-word { color: var(--text-color); display: inline-block; margin: 0 4px; transition: opacity 0.1s ease;}
+        .active-word { color: var(--highlight-color); transform: scale(1.15) translateY(-2px); display: inline-block; margin: 0 4px; }
 
-        .ui-watermark { position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.7); font-size: 16px; font-weight: 900; font-family: sans-serif; text-shadow: 2px 2px 0 rgba(0,0,0,0.6), -1px -1px 0 rgba(0,0,0,0.6), 1px -1px 0 rgba(0,0,0,0.6), -1px 1px 0 rgba(0,0,0,0.6), 1px 1px 0 rgba(0,0,0,0.6); pointer-events: none; z-index: 10; letter-spacing: 1px;}
+        .ui-watermark { position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.7); font-size: 16px; font-weight: 900; font-family: sans-serif; pointer-events: none; z-index: 10; letter-spacing: 1px;}
 
         .progress-container { width: 100%; background-color: #e2e8f0; border-radius: 8px; margin-top: 20px; overflow: hidden; display: none; height: 12px;}
-        .progress-bar { width: 0%; height: 100%; background: linear-gradient(45deg, #2563eb 25%, #3b82f6 25%, #3b82f6 50%, #2563eb 50%, #2563eb 75%, #3b82f6 75%, #3b82f6 100%); background-size: 20px 20px; animation: shimmer 1.5s linear infinite; transition: width 0.5s linear; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(45deg, #2563eb 25%, #3b82f6 25%, #3b82f6 50%, #2563eb 50%, #2563eb 75%, #3b82f6 75%, #3b82f6 100%); background-size: 20px 20px; animation: shimmer 1.5s linear infinite; transition: width 0.3s linear; }
         @keyframes shimmer { 0% { background-position: 20px 0; } 100% { background-position: 0 0; } }
 
         .settings-box { margin-top: 20px; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; text-align: left; display: none; transition: background-color 0.3s, border-color 0.3s; }
@@ -90,6 +102,13 @@
         .feature-card h3 { margin: 0 0 10px 0; color: #0f172a; font-size: 18px; transition: color 0.3s;}
         .feature-card p { margin: 0; color: #64748b; font-size: 14px; line-height: 1.5; transition: color 0.3s;}
 
+        /* --- SEO FAQ Styles --- */
+        .faq-container { max-width: 900px; margin: 40px auto; padding: 0 20px; text-align: left; width: 100%; box-sizing: border-box;}
+        .faq-container h2 { text-align: center; margin-bottom: 30px; font-size: 28px; color: #0f172a; transition: color 0.3s;}
+        .faq-item { margin-bottom: 20px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid #f1f5f9; transition: background-color 0.3s, border-color 0.3s;}
+        .faq-item h3 { margin: 0 0 10px 0; font-size: 18px; color: #1e293b; transition: color 0.3s;}
+        .faq-item p { margin: 0; color: #475569; font-size: 15px; line-height: 1.6; transition: color 0.3s;}
+
         footer { background: #fff; border-top: 1px solid #e2e8f0; padding: 30px 20px; text-align: center; margin-top: auto; transition: background-color 0.3s, border-color 0.3s; }
         .footer-links { margin-bottom: 15px; }
         .footer-links button { background: none; border: none; color: #64748b; margin: 0 12px; font-size: 14px; font-weight: 600; transition: 0.2s; cursor: pointer; font-family: inherit;}
@@ -119,53 +138,54 @@
             .nav-links a.hide-mobile { display: none; }
         }
 
-        #renderOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; color: white;}
-        #renderCanvas { max-width: 80%; max-height: 60%; border: 2px solid #3b82f6; border-radius: 8px; margin-bottom: 20px;}
+        /* --- OVERLAY MODIFIED FOR MOBILE FIX --- */
+        #renderOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; display: none; flex-direction: column; justify-content: center; align-items: center; color: white;}
+        #renderCanvas { max-width: 80%; max-height: 50%; border: 2px solid #3b82f6; border-radius: 8px; margin-top: 20px; display: none;}
+        #startRecordBtn { padding: 16px 32px; font-size: 18px; font-weight: 900; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s;}
+        #startRecordBtn:active { transform: scale(0.95); }
 
         /* --- DARK MODE STYLES --- */
         body.dark-mode { background-color: #0f172a; background-image: radial-gradient(#334155 1px, transparent 1px); color: #f8fafc; }
         body.dark-mode header { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid rgba(51, 65, 85, 0.8); }
         body.dark-mode .logo span { color: #f8fafc; }
-        body.dark-mode .nav-btn { background: #f8fafc; color: #0f172a !important; }
         body.dark-mode .nav-links a.hide-mobile { color: #94a3b8; }
         body.dark-mode .hero-text p { color: #94a3b8; }
         body.dark-mode .container { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(51, 65, 85, 0.5); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
-        
         body.dark-mode .upload-box { background: #0f172a; border-color: #475569; }
         body.dark-mode .upload-box label { color: #f8fafc !important; }
         body.dark-mode .lang-select, body.dark-mode .setting-row select, body.dark-mode .setting-row input[type="range"] { background-color: #1e293b; color: #f8fafc; border-color: #475569; }
-        
         body.dark-mode .settings-box { background: #0f172a; border-color: #334155; }
         body.dark-mode .settings-box h4 { color: #f8fafc; }
         body.dark-mode .setting-row label { color: #cbd5e1; }
         body.dark-mode .color-label { color: #cbd5e1; }
         body.dark-mode div[style*="background: #fff"] { background: #1e293b !important; border-color: #334155 !important; }
-        
         body.dark-mode .edit-toggle-btn { background: #1e293b; color: #f8fafc; border-color: #475569; }
         body.dark-mode .edit-toggle-btn:hover { background: #334155; }
         body.dark-mode .editor-inputs-wrapper { background: #0f172a; border-color: #475569; }
         body.dark-mode .editor-item-container { background: #1e293b; border-color: #334155; }
         body.dark-mode .editor-text-display { color: #f8fafc; }
         body.dark-mode .chunk-input { background: #0f172a; color: #f8fafc; border-color: #3b82f6; }
-        
         body.dark-mode #status { background: #1e293b; color: #f8fafc; border-color: #475569; }
         body.dark-mode .action-buttons { border-top-color: #334155; }
         body.dark-mode .btn-srt { background: #1e293b; color: #f8fafc; border-color: #475569; }
         body.dark-mode .btn-srt:hover { background: #334155; }
-        
         body.dark-mode .feature-card { background: #1e293b; border-color: #334155; }
         body.dark-mode .feature-card h3 { color: #f8fafc; }
         body.dark-mode .feature-card p { color: #94a3b8; }
         
+        /* SEO Dark mode */
+        body.dark-mode .faq-container h2 { color: #f8fafc; }
+        body.dark-mode .faq-item { background: #1e293b; border-color: #334155; }
+        body.dark-mode .faq-item h3 { color: #f8fafc; }
+        body.dark-mode .faq-item p { color: #cbd5e1; }
+
         body.dark-mode footer { background: #0f172a; border-top-color: #334155; }
         body.dark-mode .bottom-ad-banner { background: #0f172a; border-top-color: #334155; }
-        
         body.dark-mode .legal-content { background: #1e293b; }
         body.dark-mode .legal-content h2 { color: #f8fafc; border-bottom-color: #334155; }
         body.dark-mode .legal-content p, body.dark-mode .legal-content li { color: #cbd5e1; }
         body.dark-mode .close-modal { background: #0f172a; color: #f8fafc; }
         body.dark-mode .close-modal:hover { background: #334155; }
-        
         body.dark-mode .watermark-box { background: linear-gradient(to right, #1e3a8a, #0f172a); border-color: #1d4ed8; }
         body.dark-mode .watermark-box span { color: #bfdbfe; }
     </style>
@@ -174,12 +194,11 @@
 
     <header>
         <div class="nav-container">
-            <a href="#" class="logo">Caption<span>Pro</span></a>
+            <a href="#" class="logo">Cap<span>Nova</span></a>
             <div class="nav-links">
                 <a href="#" class="hide-mobile">Features</a>
                 <a href="#" class="hide-mobile">How it works</a>
                 <button id="themeToggle" class="theme-toggle" title="Toggle Dark Mode">🌙</button>
-                <a href="#" class="nav-btn">Start Creating</a>
             </div>
         </div>
     </header>
@@ -213,7 +232,7 @@
             <div class="video-wrapper" id="videoWrapper">
                 <video id="videoPlayer" controls playsinline crossorigin="anonymous"></video>
                 <div id="captionOverlay" class="caption-overlay"></div>
-                <div id="uiWatermark" class="ui-watermark">CaptionPro</div>
+                <div id="uiWatermark" class="ui-watermark">CapNova</div>
             </div>
 
             <div class="settings-box" id="settingsBox">
@@ -240,7 +259,8 @@
                     <label>Animation Style:</label>
                     <select id="stylePicker">
                         <option value="highlight" selected>✨ Highlight (Viral)</option>
-                        <option value="reveal">🔤 Reveal (Typewriter)</option>
+                        <option value="reveal">🔤 Reveal (Word by Word)</option>
+                        <option value="letter">🔠 Fast Typewriter (Letter)</option>
                     </select>
                 </div>
 
@@ -328,22 +348,46 @@
             </div>
         </div>
 
+        <div class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h3>How do I add free AI auto captions to my videos?</h3>
+                <p>Simply upload your video (MP4 or MOV), select your language (like English, Hindi, or Hinglish), and click 'Generate Captions'. CapNova's AI will automatically detect the audio and create highly accurate subtitles in seconds.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I remove the watermark for free?</h3>
+                <p>Yes! You can easily remove the CapNova watermark by clicking the 'Watch 1 Ad to Remove' button. It's completely free and helps support the platform.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is my video safe and private?</h3>
+                <p>Absolutely. All video processing and rendering happens locally right in your browser. We do not store or save your videos on our servers, ensuring 100% privacy for your content.</p>
+            </div>
+            
+             <div class="faq-item">
+                <h3>Can I edit the generated subtitles?</h3>
+                <p>Yes, CapNova features a built-in Smart Text Editor. You can tap on any line to edit spelling, or use the Split tool to perfectly time your captions like a pro video editor.</p>
+            </div>
+        </div>
+
     </main>
 
     <footer>
         <div class="footer-links">
             <button onclick="openModal('privacyModal')">Privacy Policy</button>
             <button onclick="openModal('termsModal')">Terms of Service</button>
-            <button onclick="openModal('contactModal')">Contact Support</button>
+            <button onclick="window.location.href='mailto:bdchaudhary90062@gmail.com'">Contact Support</button>
         </div>
-        <p class="copyright">© CaptionPro. Crafted with ❤️ for Creators.</p>
+        <p class="copyright">© CapNova. Crafted with ❤️ for Creators.</p>
     </footer>
 
     <div id="privacyModal" class="legal-modal">
         <div class="legal-content">
             <button class="close-modal" onclick="closeModal('privacyModal')">✖</button>
             <h2>Privacy Policy</h2>
-            <p>Welcome to CaptionPro. Your privacy is critically important to us.</p>
+            <p>Welcome to CapNova. Your privacy is critically important to us.</p>
             <ul>
                 <li><strong>No Video Storage:</strong> All video processing and rendering happens locally on your device's browser. We do NOT upload, save, or store your videos on our servers.</li>
                 <li><strong>Audio Processing:</strong> We extract and send only the audio portion of your video to our secure AI partner (AssemblyAI) solely for the purpose of generating text captions. This audio is processed and immediately discarded.</li>
@@ -357,23 +401,12 @@
         <div class="legal-content">
             <button class="close-modal" onclick="closeModal('termsModal')">✖</button>
             <h2>Terms of Service</h2>
-            <p>By accessing and using CaptionPro, you accept and agree to be bound by these terms.</p>
+            <p>By accessing and using CapNova, you accept and agree to be bound by these terms.</p>
             <ul>
                 <li><strong>Usage:</strong> You are responsible for the content you process using our tool. Do not use our service to generate captions for illegal or copyrighted material without permission.</li>
-                <li><strong>Service Availability:</strong> While we strive for 100% uptime, CaptionPro is provided "as is". We are not liable for any temporary downtimes or rendering failures.</li>
+                <li><strong>Service Availability:</strong> While we strive for 100% uptime, CapNova is provided "as is". We are not liable for any temporary downtimes or rendering failures.</li>
                 <li><strong>Monetization:</strong> We employ standard advertising and rewarded video ads to support our infrastructure. Users must not use ad-blockers to bypass these systems if they wish to access premium features like watermark removal.</li>
             </ul>
-        </div>
-    </div>
-
-    <div id="contactModal" class="legal-modal">
-        <div class="legal-content">
-            <button class="close-modal" onclick="closeModal('contactModal')">✖</button>
-            <h2>Contact Support</h2>
-            <p>Have a question, feedback, or need business support? We're here to help!</p>
-            <p><strong>Email:</strong> support@captionpro.com</p>
-            <p><strong>Business Inquiries:</strong> bhavesh@captionpro.com</p>
-            <p>We usually respond within 24-48 business hours.</p>
         </div>
     </div>
 
@@ -387,12 +420,19 @@
             'params' : {}
           };
         </script>
-        <script src="https://www.highperformanceformat.com/557148f64745c1d7193a8835837737da/invoke.js"></script>
+        <script async defer src="https://www.highperformanceformat.com/557148f64745c1d7193a8835837737da/invoke.js"></script>
     </div>
 
     <div id="renderOverlay">
-        <h2 style="color: white; margin-bottom: 10px;">Exporting Final Video... ⏳</h2>
-        <p style="color: #cbd5e1; margin-bottom: 20px;">Please wait. Do not switch tabs or lock your phone.</p>
+        <h2 style="color: white; margin-bottom: 10px; text-align: center;">Exporting Final Video... ⏳</h2>
+        <p style="color: #cbd5e1; margin-bottom: 20px; text-align: center; max-width: 80%;">Ad close karke wapas yahan aao, aur neeche button dabao taaki recording shuru ho sake!</p>
+        
+        <button id="startRecordBtn">▶️ Tap Here to Start Export</button>
+
+        <div style="width: 80%; max-width: 400px; background-color: #334155; border-radius: 8px; margin-bottom: 20px; overflow: hidden; height: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+            <div id="renderProgressBar" style="width: 0%; height: 100%; background: linear-gradient(45deg, #10b981, #059669); transition: width 0.1s linear;"></div>
+        </div>
+
         <canvas id="renderCanvas"></canvas>
     </div>
 
@@ -401,7 +441,6 @@
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         
-        // Check saved theme from localStorage
         if(localStorage.getItem('theme') === 'dark') {
             body.classList.add('dark-mode');
             themeToggle.innerText = '☀️';
@@ -417,7 +456,6 @@
                 themeToggle.innerText = '🌙';
             }
         });
-        // --- End Dark Mode Logic ---
 
         const uploader = document.getElementById('videoUpload');
         const videoPlayer = document.getElementById('videoPlayer');
@@ -446,7 +484,7 @@
         const btnRemoveWm = document.getElementById('btnRemoveWm');
         const wmStatus = document.getElementById('wmStatus');
         const uiWatermark = document.getElementById('uiWatermark');
-
+        
         let selectedFile = null;
         let transcriptWords = [];
         let customChunks = []; 
@@ -457,18 +495,10 @@
 
         const SYNC_OFFSET = 150; 
         let isWatermarkRemoved = false;
-
-        let userColor = "#FFFFFF";
-        let userHighlight = "#FFFF00";
-
         let captionAnimFrameId = null;
 
-        function openModal(id) {
-            document.getElementById(id).style.display = 'flex';
-        }
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
         colorPicker.addEventListener('input', (e) => { userColor = e.target.value; captionOverlay.style.setProperty('--text-color', userColor); });
         highlightPicker.addEventListener('input', (e) => { userHighlight = e.target.value; captionOverlay.style.setProperty('--highlight-color', userHighlight); });
@@ -478,7 +508,7 @@
         
         stylePicker.addEventListener('change', () => { 
             captionOverlay.innerHTML = ""; 
-            if (stylePicker.value === 'reveal') {
+            if (stylePicker.value === 'reveal' || stylePicker.value === 'letter') {
                 highlightWrapper.style.display = 'none';
             } else {
                 highlightWrapper.style.display = 'block';
@@ -498,12 +528,15 @@
         boxToggle.addEventListener('change', updateBoxStyle);
         bgColorPicker.addEventListener('input', updateBoxStyle);
 
-        // --- 2. YAHAN HAI WATERMARK BUTTON WALA SMART LINK ---
+        langPicker.addEventListener('change', () => {
+            if (selectedFile && !isProcessing) {
+                generateBtn.disabled = false;
+                statusText.innerText = "🌍 Language updated! Click 'Generate Captions' again.";
+            }
+        });
+
         btnRemoveWm.addEventListener('click', () => {
-            // Adsterra Smart Link opens in a new tab
             window.open("https://www.profitablecpmratenetwork.com/w3pnv253iz?key=5a1ab94ce679fabc7f8983de83ee91a4", '_blank');
-            
-            // Instantly remove watermark for the user
             isWatermarkRemoved = true;
             btnRemoveWm.style.display = 'none';
             wmStatus.style.display = 'block';
@@ -528,12 +561,12 @@
             clearInterval(progressTimer);
             progressTimer = setInterval(() => {
                 let remaining = 95 - currentProgress;
-                let step = remaining * 0.04; 
-                if (step < 0.15) step = 0.15; 
+                let step = remaining * 0.1; 
+                if (step < 0.2) step = 0.2; 
                 currentProgress += step;
                 if (currentProgress > 95) currentProgress = 95; 
                 progressBar.style.width = currentProgress + "%";
-            }, 500); 
+            }, 300); 
         }
 
         uploader.addEventListener('change', (event) => {
@@ -545,6 +578,8 @@
                     uploader.value = ''; 
                     return; 
                 }
+
+                fetch('https://captions-backend-pgk2.onrender.com/').catch(() => console.log('Waking server...'));
 
                 selectedFile = file;
                 let tempUrl = URL.createObjectURL(selectedFile);
@@ -710,14 +745,11 @@
             });
         }
 
-        // --- 3. YAHAN HAI GENERATE BUTTON WALA SMART LINK ---
         generateBtn.addEventListener('click', async () => {
             if (!selectedFile) return;
 
-            // Open Adsterra Smart Link in a new tab smoothly
             window.open("https://www.profitablecpmratenetwork.com/w3pnv253iz?key=5a1ab94ce679fabc7f8983de83ee91a4", '_blank');
 
-            // Immediately start processing without any fake delays
             isProcessing = true; generateBtn.disabled = true; actionButtons.style.display = 'none'; 
             settingsBox.style.display = 'none'; editorPanel.style.display = 'none'; editorInputsWrapper.style.display = 'none'; 
             document.getElementById('editorArrow').innerText = '▼'; document.getElementById('toggleEditorBtn').style.borderRadius = '8px';
@@ -725,7 +757,7 @@
             startContinuousProgress();
 
             try {
-                statusText.innerText = "⏳ Uploading video to your secure backend...";
+                statusText.innerText = "⏳ Uploading video... Please wait 🚀";
                 let lang = document.getElementById('langPicker').value;
 
                 const formData = new FormData();
@@ -747,7 +779,7 @@
 
                 let isCompleted = false;
                 while (!isCompleted) {
-                    await new Promise(r => setTimeout(r, 3000)); 
+                    await new Promise(r => setTimeout(r, 2000)); 
                     
                     const checkRes = await fetch(`https://captions-backend-pgk2.onrender.com/status/${transcriptId}`);
                     const checkData = await checkRes.json();
@@ -768,7 +800,7 @@
                         setTimeout(() => progressContainer.style.display = 'none', 1000);
                         settingsBox.style.display = 'block'; editorPanel.style.display = 'block'; actionButtons.style.display = 'flex';
                         
-                        if (stylePicker.value === 'reveal') {
+                        if (stylePicker.value === 'reveal' || stylePicker.value === 'letter') {
                             highlightWrapper.style.display = 'none';
                         } else {
                             highlightWrapper.style.display = 'block';
@@ -816,6 +848,23 @@
                             } else {
                                 wordsHtml += `<span class="normal-word" style="opacity: 0;">${w.text}</span>`;
                             }
+                        } else if (animStyle === 'letter') {
+                            if (i < activeWordIndex || (activeWordIndex === -1 && i <= lastSpokenIndex)) {
+                                wordsHtml += `<span class="normal-word">${w.text}</span>`;
+                            } else if (i === activeWordIndex) {
+                                let progress = (currentTime - w.start) / (w.end - w.start);
+                                if (progress < 0) progress = 0;
+                                if (progress > 1) progress = 1;
+                                let visibleCount = Math.floor(w.text.length * progress);
+                                let visibleText = w.text.substring(0, visibleCount);
+                                
+                                wordsHtml += `<span class="normal-word" style="position: relative; display: inline-block;">
+                                    <span style="opacity: 0;">${w.text}</span>
+                                    <span style="position: absolute; left: 0; top: 0; white-space: nowrap; overflow: hidden; color: var(--text-color);">${visibleText}</span>
+                                </span>`;
+                            } else {
+                                wordsHtml += `<span class="normal-word" style="opacity: 0;">${w.text}</span>`;
+                            }
                         } else {
                             wordsHtml += `<span class="${i === activeWordIndex ? 'active-word' : 'normal-word'}">${w.text}</span>`;
                         }
@@ -836,158 +885,173 @@
             });
         }
 
-        // --- 4. YAHAN HAI DOWNLOAD BUTTON WALA SMART LINK ---
-        document.getElementById('btnDownloadVideo').addEventListener('click', async () => {
+        document.getElementById('btnDownloadVideo').addEventListener('click', () => {
             if(customChunks.length === 0) return alert("Please generate captions first!");
 
-            // ✅ Download dabate hi naye tab mein Ad khulega
             window.open("https://www.profitablecpmratenetwork.com/w3pnv253iz?key=5a1ab94ce679fabc7f8983de83ee91a4", '_blank');
 
-            // Aur main tab mein tumhara video background mein render hona shuru!
             const overlay = document.getElementById('renderOverlay');
-            const canvas = document.getElementById('renderCanvas');
-            const ctx = canvas.getContext('2d');
+            const startRecordBtn = document.getElementById('startRecordBtn');
+            const renderProgressBar = document.getElementById('renderProgressBar');
             
             overlay.style.display = 'flex';
-            
+            renderProgressBar.style.width = '0%'; 
+            startRecordBtn.style.display = 'block'; 
+            document.getElementById('renderCanvas').style.display = 'none'; 
+        });
+
+        document.getElementById('startRecordBtn').addEventListener('click', async function() {
+            this.style.display = 'none'; 
+            const canvas = document.getElementById('renderCanvas');
+            canvas.style.display = 'block';
+            const ctx = canvas.getContext('2d');
+            const overlay = document.getElementById('renderOverlay');
+            const renderProgressBar = document.getElementById('renderProgressBar');
+
             canvas.width = videoPlayer.videoWidth;
             canvas.height = videoPlayer.videoHeight;
 
-            const canvasStream = canvas.captureStream(30); 
-            
-            let audioStream;
-            if (videoPlayer.captureStream) audioStream = videoPlayer.captureStream();
-            else if (videoPlayer.mozCaptureStream) audioStream = videoPlayer.mozCaptureStream();
-
-            const tracks = [...canvasStream.getVideoTracks()];
-            if (audioStream && audioStream.getAudioTracks().length > 0) {
-                tracks.push(audioStream.getAudioTracks()[0]);
-            }
-            const combinedStream = new MediaStream(tracks);
-
-            let mimeType = 'video/webm;codecs=vp9';
-            if (!MediaRecorder.isTypeSupported(mimeType)) {
-                mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : 'video/webm';
-            }
-
-            let recorderOptions = { mimeType: mimeType };
             try {
-                recorderOptions = {
-                    mimeType: mimeType,
-                    videoBitsPerSecond: 8000000, 
-                    audioBitsPerSecond: 320000   
+                const canvasStream = canvas.captureStream(30); 
+                
+                let audioStream;
+                try {
+                    videoPlayer.muted = false; 
+                    videoPlayer.volume = 1; 
+                    if (videoPlayer.captureStream) audioStream = videoPlayer.captureStream();
+                    else if (videoPlayer.mozCaptureStream) audioStream = videoPlayer.mozCaptureStream();
+                } catch(e) { console.warn("Audio stream not supported on this device."); }
+
+                const tracks = [...canvasStream.getVideoTracks()];
+                if (audioStream && audioStream.getAudioTracks().length > 0) {
+                    tracks.push(audioStream.getAudioTracks()[0]);
+                }
+                const combinedStream = new MediaStream(tracks);
+
+                let mimeType = 'video/webm;codecs=vp9';
+                if (!MediaRecorder.isTypeSupported(mimeType)) {
+                    mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : 'video/webm';
+                }
+
+                const recorder = new MediaRecorder(combinedStream, { mimeType: mimeType, videoBitsPerSecond: 8000000 });
+                const chunks = [];
+
+                recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+                
+                recorder.onstop = () => {
+                    clearInterval(renderInterval); 
+                    const blob = new Blob(chunks, { type: mimeType });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `CapNova_HQ.` + (mimeType.includes('mp4') ? 'mp4' : 'webm');
+                    document.body.appendChild(a); 
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    overlay.style.display = 'none'; 
+                    videoPlayer.pause(); 
                 };
-            } catch (e) {}
 
-            const recorder = new MediaRecorder(combinedStream, recorderOptions);
-            const chunks = [];
+                videoPlayer.currentTime = 0; 
+                await videoPlayer.play();
+                recorder.start();
 
-            recorder.ondataavailable = e => chunks.push(e.data);
-            
-            recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `CaptionPro_HQ.` + (mimeType.includes('mp4') ? 'mp4' : 'webm');
-                a.click();
-                
-                overlay.style.display = 'none'; 
-                videoPlayer.volume = 1; 
-            };
+                const renderInterval = setInterval(() => {
+                    let progressPercent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                    renderProgressBar.style.width = progressPercent + '%';
 
-            videoPlayer.onended = () => {
-                if (recorder.state === "recording") {
-                    recorder.stop();
-                }
-            };
-
-            recorder.start();
-            videoPlayer.currentTime = 0; 
-            videoPlayer.muted = false; 
-            videoPlayer.volume = 0; 
-            await videoPlayer.play();
-
-            function drawFrame() {
-                if (videoPlayer.paused || videoPlayer.ended) { 
-                    if (recorder.state === "recording") recorder.stop(); 
-                    return; 
-                }
-
-                ctx.drawImage(videoPlayer, 0, 0, canvas.width, canvas.height);
-
-                if (!isWatermarkRemoved) {
-                    let wmSize = Math.max(20, canvas.width * 0.03);
-                    ctx.font = `900 ${wmSize}px sans-serif`;
-                    ctx.textAlign = "right"; 
-                    ctx.textBaseline = "top";
-                    ctx.lineWidth = 3;
-                    ctx.strokeStyle = "rgba(0,0,0,0.6)";
-                    ctx.strokeText("CaptionPro", canvas.width - 20, 20);
-                    ctx.fillStyle = "rgba(255,255,255,0.7)";
-                    ctx.fillText("CaptionPro", canvas.width - 20, 20);
-                }
-
-                const currentTime = (videoPlayer.currentTime * 1000) + SYNC_OFFSET;
-                let activeChunk = customChunks.find(c => currentTime >= c.start && currentTime <= c.end);
-                
-                if (activeChunk) {
-                    let activeWordIndex = -1;
-                    let lastSpokenIndex = -1;
-                    
-                    for (let i = 0; i < activeChunk.words.length; i++) {
-                        let w = activeChunk.words[i];
-                        if (currentTime >= w.start) {
-                            lastSpokenIndex = i;
-                            if (currentTime <= w.end) activeWordIndex = i;
-                        }
-                    }
-                    
-                    let scale = sizePicker.value / 32; 
-                    let fontSize = Math.floor(canvas.width * 0.05 * scale); 
-                    
-                    ctx.font = `900 ${fontSize}px ${fontPicker.value}`;
-                    ctx.textAlign = "center"; ctx.textBaseline = "bottom";
-                    
-                    let yPosOffset = posPicker.value;
-                    let yPos = canvas.height - (canvas.height * (yPosOffset / 100)); 
-                    
-                    let fullText = activeChunk.words.map(w => w.text).join(" ");
-                    let textWidth = ctx.measureText(fullText).width;
-                    
-                    if (boxToggle.checked) {
-                        let userBgColor = bgColorPicker.value === "#000000" ? "rgba(0, 0, 0, 0.6)" : bgColorPicker.value;
-                        ctx.fillStyle = userBgColor;
-                        ctx.fillRect((canvas.width / 2) - (textWidth / 2) - 20, yPos - fontSize - 10, textWidth + 40, fontSize + 20);
+                    if (videoPlayer.paused && !videoPlayer.ended) {
+                        videoPlayer.play().catch(e => console.warn(e));
                     }
 
-                    let startX = (canvas.width / 2) - (textWidth / 2);
-                    let animStyle = stylePicker.value;
+                    if (videoPlayer.ended) { 
+                        if (recorder.state === "recording") recorder.stop(); 
+                        return; 
+                    }
 
-                    activeChunk.words.forEach((w, i) => {
-                        let wordWidth = ctx.measureText(w.text + " ").width;
+                    ctx.drawImage(videoPlayer, 0, 0, canvas.width, canvas.height);
+
+                    if (!isWatermarkRemoved) {
+                        let wmSize = Math.max(20, canvas.width * 0.03);
+                        ctx.font = `900 ${wmSize}px sans-serif`;
+                        ctx.textAlign = "right"; 
+                        ctx.textBaseline = "top";
+                        ctx.fillStyle = "rgba(255,255,255,0.7)";
+                        ctx.fillText("CapNova", canvas.width - 20, 20);
+                    }
+
+                    const currentTime = (videoPlayer.currentTime * 1000) + SYNC_OFFSET;
+                    let activeChunk = customChunks.find(c => currentTime >= c.start && currentTime <= c.end);
+                    
+                    if (activeChunk) {
+                        let activeWordIndex = -1;
+                        let lastSpokenIndex = -1;
                         
-                        if (animStyle === 'reveal') {
-                            if (i <= lastSpokenIndex) {
-                                ctx.strokeStyle = "black"; ctx.lineWidth = fontSize * 0.1;
-                                ctx.strokeText(w.text, startX + (wordWidth/2), yPos);
-                                ctx.fillStyle = colorPicker.value; 
-                                ctx.fillText(w.text, startX + (wordWidth/2), yPos);
+                        for (let i = 0; i < activeChunk.words.length; i++) {
+                            let w = activeChunk.words[i];
+                            if (currentTime >= w.start) {
+                                lastSpokenIndex = i;
+                                if (currentTime <= w.end) activeWordIndex = i;
                             }
-                        } else {
-                            ctx.strokeStyle = "black"; ctx.lineWidth = fontSize * 0.1;
-                            ctx.strokeText(w.text, startX + (wordWidth/2), yPos);
-                            ctx.fillStyle = (i === activeWordIndex) ? highlightPicker.value : colorPicker.value;
-                            ctx.fillText(w.text, startX + (wordWidth/2), yPos);
                         }
-                        startX += wordWidth;
-                    });
-                }
-                
-                requestAnimationFrame(drawFrame);
+                        
+                        let scale = sizePicker.value / 32; 
+                        let fontSize = Math.floor(canvas.width * 0.05 * scale); 
+                        
+                        ctx.font = `900 ${fontSize}px ${fontPicker.value}`;
+                        ctx.textBaseline = "bottom";
+                        
+                        let yPosOffset = posPicker.value;
+                        let yPos = canvas.height - (canvas.height * (yPosOffset / 100)); 
+                        
+                        let fullText = activeChunk.words.map(w => w.text).join(" ");
+                        let textWidth = ctx.measureText(fullText).width;
+                        
+                        if (boxToggle.checked) {
+                            let userBgColor = bgColorPicker.value === "#000000" ? "rgba(0, 0, 0, 0.6)" : bgColorPicker.value;
+                            ctx.fillStyle = userBgColor;
+                            ctx.fillRect((canvas.width / 2) - (textWidth / 2) - 20, yPos - fontSize - 10, textWidth + 40, fontSize + 20);
+                        }
+
+                        ctx.textAlign = "left"; 
+                        let startX = (canvas.width / 2) - (textWidth / 2);
+                        let animStyle = stylePicker.value;
+
+                        activeChunk.words.forEach((w, i) => {
+                            let wordWidth = ctx.measureText(w.text + " ").width;
+                            
+                            if (animStyle === 'reveal') {
+                                if (i <= lastSpokenIndex) {
+                                    ctx.fillStyle = colorPicker.value; 
+                                    ctx.fillText(w.text, startX, yPos);
+                                }
+                            } else if (animStyle === 'letter') {
+                                if (i < activeWordIndex || (activeWordIndex === -1 && i <= lastSpokenIndex)) {
+                                    ctx.fillStyle = colorPicker.value; 
+                                    ctx.fillText(w.text, startX, yPos);
+                                } else if (i === activeWordIndex) {
+                                    let progress = (currentTime - w.start) / (w.end - w.start);
+                                    if (progress < 0) progress = 0;
+                                    if (progress > 1) progress = 1;
+                                    let visibleCount = Math.floor(w.text.length * progress);
+                                    let visibleText = w.text.substring(0, visibleCount);
+                                    
+                                    ctx.fillStyle = colorPicker.value; 
+                                    ctx.fillText(visibleText, startX, yPos);
+                                }
+                            } else {
+                                ctx.fillStyle = (i === activeWordIndex) ? highlightPicker.value : colorPicker.value;
+                                ctx.fillText(w.text, startX, yPos);
+                            }
+                            startX += wordWidth;
+                        });
+                    }
+                }, 1000 / 30);
+            } catch (error) {
+                alert("Download Error: " + error.message);
+                document.getElementById('renderOverlay').style.display = 'none';
             }
-            
-            requestAnimationFrame(drawFrame);
         });
 
         document.getElementById('btnDownloadSrt').addEventListener('click', () => {
@@ -1000,9 +1064,9 @@
             });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([srtContent], { type: 'text/srt' }));
-            a.download = 'CaptionPro_HighQuality.srt';
+            a.download = 'CapNova_HighQuality.srt';
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
         });
     </script>
 </body>
-            </html>
+                </html>
